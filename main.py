@@ -43,8 +43,8 @@ def send_email(subject, body):
     sender = os.environ['EMAIL_USER']
     password = os.environ['EMAIL_PASSWORD']
     receivers = os.environ['EMAIL_TO'].split(',')
-    host = os.environ.get('smtp.gmail.com', 'smtp.gmail.com')
-    port = int(os.environ.get('587', 587))
+    host = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+    port = int(os.environ.get('EMAIL_PORT', 587))
 
     msg = MIMEMultipart()
     msg['from'] = sender
