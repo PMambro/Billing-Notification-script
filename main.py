@@ -7,11 +7,14 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 '''from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build'''
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # CONFIG
 sheet_id = "google_sheet_id"
 sheet_range = "Sheet1!A1"
-bill_value_usd = 20
+bill_value_usd = 20.00
 
 # Get the exchange rate through the awesomeAPI
 def fetch_ptax_rate():
@@ -60,13 +63,14 @@ def send_email(subject, body):
 
 
 def main():
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     rate = fetch_ptax_rate()
     bill_value_brl = round(bill_value_usd * rate, 2)
 
-    body = f"No dia de hoje, tananana, o dólar está quotado em R$ {rate:.4f}.\n A cobrança veio hoje no valor de US$ 20.00 = R$ {bill_value_brl}"
+    body = f"Data: {now} \nPreço do chatGPT: US$ {bill_value_usd} \n Cotação PTAX (Banco Central) + 4% de spread: {rate:.4f}.\n Total a pagar: R$ {bill_value_brl}"
     print(body)
 
-    send_email("Test 2", body)
+    send_email("Test 3", body)
 
 if __name__ == "__main__":
     main()
