@@ -71,13 +71,14 @@ def main():
     rate = fetch_ptax_rate()
     bill_value_brl = round(bill_value_usd * rate, 2)
     bill_value_per_person = round(bill_value_brl * iof / 4, 2)
+    pix_key = os.environ['PIX_KEY']
 
 
     service = os.environ['SERVICE']
 
-    body = f"Data: {date}. \nCotação PTAX (Banco Central) + 4% de spread: {rate:.4f}.\nMensalidade: US$ {bill_value_usd}.\
+    body = f"Data da cobrança: {date}. \nCotação PTAX (Banco Central) + 4% de spread: {rate:.4f}.\nMensalidade: US$ {bill_value_usd}.\
           \nMensalidade convertida em Reais: {bill_value_brl} \nIOF: 3.38% sobre o valor total da transação \
-          \nValor a ser pago: {bill_value_per_person}"
+          \nValor a ser pago: {bill_value_per_person} \nChave pix: {pix_key}"
     print(body)
 
     send_email(f"Mensalidade {service} {mes[month]} de {year}", body)
