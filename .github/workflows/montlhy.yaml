@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests google-api-python-client google-auth google-auth-oauthlib
+          pip install requests google-api-python-client google-auth google-auth-oauthlib python-dotenv
 
       - name: Run currency script
         env:
