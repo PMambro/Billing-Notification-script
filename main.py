@@ -3,6 +3,7 @@ import smtplib
 import requests
 import json
 from datetime import datetime
+from calendario import mes
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 '''from google.oauth2.service_account import Credentials
@@ -11,9 +12,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# CONFIG
+# Config variables
 sheet_id = "google_sheet_id"
 sheet_range = "Sheet1!A1"
+iof = 1.0338
 bill_value_usd = 20.00
 
 # Get the exchange rate through the awesomeAPI
@@ -63,14 +65,22 @@ def send_email(subject, body):
 
 
 def main():
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    date = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+    month = datetime.now().month
+    year = datetime.now().year
     rate = fetch_ptax_rate()
     bill_value_brl = round(bill_value_usd * rate, 2)
+    bill_value_per_person = round(bill_value_brl * iof / 4, 2)
 
-    body = f"Data: {now} \nPreço do chatGPT: US$ {bill_value_usd} \n Cotação PTAX (Banco Central) + 4% de spread: {rate:.4f}.\n Total a pagar: R$ {bill_value_brl}"
+
+    service = os.environ['SERVICE']
+
+    body = f"Data: {date}. \nCotação PTAX (Banco Central) + 4% de spread: {rate:.4f}.\nMensalidade: US$ {bill_value_usd}.\
+          \nMensalidade convertida em Reais: {bill_value_brl} \nIOF: 3.38% sobre o valor total da transação \
+          \nValor a ser pago: {bill_value_per_person}"
     print(body)
 
-    send_email("Test 3", body)
+    send_email(f"Mensalidade {service} {mes[month]} de {year}", body)
 
 if __name__ == "__main__":
     main()
