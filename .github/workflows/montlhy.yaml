@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests google-api-python-client google-auth google-auth-oauthlib
+          pip install requests google-api-python-client google-auth google-auth-oauthlib python-dotenv
 
       - name: Run currency script
         env:
@@ -30,4 +30,6 @@ jobs:
           EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
           EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          PIX_KEY: ${{secrets.PIX_KEY}}
+          SERVICE: ${{secrets.SERVICE}}
         run: python main.py

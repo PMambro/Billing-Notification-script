@@ -44,19 +44,27 @@ def fetch_ptax_rate():
 
 
 # Send the email with the R$value converted to US$
-def send_email(subject, body):
+def send_email(subject, html_path, date, rate, usd, brl, bill, pix):
     sender = os.environ['EMAIL_USER']
     password = os.environ['EMAIL_PASSWORD']
     receivers = os.environ['EMAIL_TO'].split(',')
     host = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
     port = int(os.environ.get('EMAIL_PORT', 587))
 
-    msg = MIMEMultipart()
+    msg = MIMEMultipart("alternative")
     msg['from'] = sender
     msg['to'] = ','.join(receivers)
     msg['subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+
+    text = "Your email client does not support"
+
+    with open(html_path, "r", encoding="utf-8") as f:
+        html_template = f.read()
+        html = html_template.format(date=date, rate=rate, usd=usd, brl=brl, bill=bill, pix=pix)
     
+    msg.attach(MIMEText(text, 'plain'))
+    msg.attach(MIMEText(html, 'html'))
+
     with smtplib.SMTP(host, port) as server:
         server.starttls()
         server.login(sender, password)
@@ -76,12 +84,14 @@ def main():
 
     service = os.environ['SERVICE']
 
-    body = f"Data da cobrança: {date}. \nCotação PTAX (Banco Central) + 4% de spread: {rate:.4f}.\nMensalidade: US$ {bill_value_usd}.\
+    '''body = f"Data da cobrança: {date}. \nCotação PTAX (Banco Central) + 4% de spread: {rate:.4f}.\nMensalidade: US$ {bill_value_usd}.\
           \nMensalidade convertida em Reais: R${bill_value_brl} \nIOF: 3.38% sobre o valor total da transação \
           \nValor a ser pago: R${bill_value_per_person} \nChave pix: {pix_key}"
-    print(body)
+    print(body)'''
 
-    send_email(f"Mensalidade {service} {mes[month]} de {year}", body)
+    print('Riiight')
+
+    send_email(f"Mensalidade {service} {mes[month]} de {year}", "email_template.html", date, rate, bill_value_usd, bill_value_brl, bill_value_per_person, pix_key)
 
 if __name__ == "__main__":
     main()
