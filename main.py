@@ -44,7 +44,11 @@ def fetch_ptax_rate():
     return ptax * 1.04  # Apply 4% spread
 
 
+ google-sheet-branch
 # Send the email with the billing info converted to R$
+
+# Send the email with the billing info converted to R$
+ main
 def send_email(subject, html_path, date, rate, usd, brl, bill, pix):
     sender = os.environ['EMAIL_USER']
     password = os.environ['EMAIL_PASSWORD']
@@ -104,10 +108,17 @@ def main():
           \nValor a ser pago: R${bill_value_per_person} \nChave pix: {pix_key}"
     print(body)'''
 
+ google-sheet-branch
     send_email(f"Mensalidade {service} {month} de {year}", "email_template.html", date, rate, bill_value_usd, bill_value_brl, bill_value_per_person, pix_key)
     write_to_google_sheet(month, bill_value_usd, round(rate, 4), bill_value_brl, iof, bill_value_per_person)
 
     print('Riiight')
+
+    send_email(f"Mensalidade {service} {month} de {year}", "email_template.html", date, rate, bill_value_usd, bill_value_brl, bill_value_per_person, pix_key)
+    write_to_google_sheet(month, bill_value_usd, round(rate, 4), bill_value_brl, iof, bill_value_per_person)
+
+    print('Riiight')
+ main
 
 if __name__ == "__main__":
     main()
