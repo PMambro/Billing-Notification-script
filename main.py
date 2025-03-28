@@ -81,7 +81,7 @@ def write_to_google_sheet(month, usd_value, rate, brl_value, iof, bill):
     values = [[month, usd_value, rate, brl_value, iof, bill]]
     body = {"values": values}
     service.spreadsheets().values().append(
-        spreadsheetId=sheet_id_test,
+        spreadsheetId=sheet_id,
         range=sheet_range,
         valueInputOption="USER_ENTERED",
         body=body
