@@ -30,4 +30,6 @@ jobs:
           EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
           EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          SERVICE: ${{secrets.SERVICE}}
+          PIX_KEY: ${{secrets.PIX_KEY}}
         run: python main.py
