@@ -30,11 +30,6 @@ jobs:
           EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
           EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
- google-sheet-branch
           PIX_KEY: ${{secrets.PIX_KEY}}
           SERVICE: ${{secrets.SERVICE}
-
-          PIX_KEY: ${{secrets.PIX_KEY}}
-          SERVICE: ${{secrets.SERVICE}}
- main
         run: python main.py
