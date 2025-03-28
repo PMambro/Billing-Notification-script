@@ -6,19 +6,20 @@ from datetime import datetime
 from calendario import mes
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-'''from google.oauth2.service_account import Credentials
-from googleapiclient.discovery import build'''
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Config variables
-sheet_id = "google_sheet_id"
-sheet_range = "Sheet1!A1"
+sheet_id = "1FJOimQV0qHXdD76HGpDSqUsQhh80v-fikERzcGCCkWE"                # ID of the google sheets you are going to insert the data into
+sheet_id_test = "14AiRvaYRDmols7VXmKY7VE_Zq3fM631lIPopst0Iowg"           # Just another ID
+sheet_range = "Página1!A1:F100"                                              # Defines the range of the sheet
 iof = 1.0338
 bill_value_usd = 20.00
 
-# Get the exchange rate through the awesomeAPI
+# Get the PTAX exchange rate from the Banco Central 
 def fetch_ptax_rate():
     from datetime import date, timedelta
 
@@ -43,7 +44,11 @@ def fetch_ptax_rate():
     return ptax * 1.04  # Apply 4% spread
 
 
-# Send the email with the R$value converted to US$
+ google-sheet-branch
+# Send the email with the billing info converted to R$
+
+# Send the email with the billing info converted to R$
+ main
 def send_email(subject, html_path, date, rate, usd, brl, bill, pix):
     sender = os.environ['EMAIL_USER']
     password = os.environ['EMAIL_PASSWORD']
@@ -70,11 +75,25 @@ def send_email(subject, html_path, date, rate, usd, brl, bill, pix):
         server.login(sender, password)
         server.sendmail(sender, receivers, msg.as_string())
 
+# Write the billing info in a Google Sheet
+def write_to_google_sheet(month, usd_value, rate, brl_value, iof, bill):
+    creds_json = json.loads(os.environ['GOOGLE_CREDENTIALS'])
+    creds = Credentials.from_service_account_info(creds_json, scopes=["https://www.googleapis.com/auth/spreadsheets"])
+    service = build('sheets', 'v4', credentials=creds)
+
+    values = [[month, usd_value, rate, brl_value, iof, bill]]
+    body = {"values": values}
+    service.spreadsheets().values().append(
+        spreadsheetId=sheet_id_test,
+        range=sheet_range,
+        valueInputOption="USER_ENTERED",
+        body=body
+    ).execute()
 
 
 def main():
     date = datetime.now().strftime("%d-%m-%y %H:%M:%S")
-    month = datetime.now().month
+    month = mes[datetime.now().month]
     year = datetime.now().year
     rate = fetch_ptax_rate()
     bill_value_brl = round(bill_value_usd * rate, 2)
@@ -89,9 +108,17 @@ def main():
           \nValor a ser pago: R${bill_value_per_person} \nChave pix: {pix_key}"
     print(body)'''
 
+ google-sheet-branch
+    send_email(f"Mensalidade {service} {month} de {year}", "email_template.html", date, rate, bill_value_usd, bill_value_brl, bill_value_per_person, pix_key)
+    write_to_google_sheet(month, bill_value_usd, round(rate, 4), bill_value_brl, iof, bill_value_per_person)
+
     print('Riiight')
 
-    send_email(f"Mensalidade {service} {mes[month]} de {year}", "email_template.html", date, rate, bill_value_usd, bill_value_brl, bill_value_per_person, pix_key)
+    send_email(f"Mensalidade {service} {month} de {year}", "email_template.html", date, rate, bill_value_usd, bill_value_brl, bill_value_per_person, pix_key)
+    write_to_google_sheet(month, bill_value_usd, round(rate, 4), bill_value_brl, iof, bill_value_per_person)
+
+    print('Riiight')
+ main
 
 if __name__ == "__main__":
     main()
