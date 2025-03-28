@@ -2,7 +2,7 @@ name: Monthly BRL to USD Tracker
 
 on:
   schedule:
-    - cron: '0 17 28 * *'  # Runs on the 26th day of each month at 17:00 UTC (14:00 UTC-3)
+    - cron: '0 17 26 * *'  # Runs on the 26th day of each month at 17:00 UTC (14:00 UTC-3)
   workflow_dispatch:      # Allows manual runs from GitHub
 
 jobs:
