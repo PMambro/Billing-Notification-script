@@ -1,6 +1,8 @@
 # Monthly R$ to US$ Tracker 🏦💸
 
-This Python script fetches the official **PTAX exchange rate** from Banco Central do Brasil, adds a 4% spread, converts a fixed BRL amount to USD, stores the result in a **Google Sheet**, and sends an **email notification** with the details.
+This Python script was created to get the value of a bill in US$, convert to R$, and notify those who have to pay the bill. 
+
+The script fetches the official **PTAX exchange rate** from Banco Central do Brasil, adds a 4% spread, converts a fixed BRL amount to USD, stores the result in a **Google Sheet**, and sends an **email notification** with the details.
 
 It runs automatically every month using **GitHub Actions**, without requiring a server or local machine to stay on.
 
