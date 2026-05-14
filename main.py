@@ -15,7 +15,7 @@ load_dotenv()
 # Config variables
 sheet_id = "1FJOimQV0qHXdD76HGpDSqUsQhh80v-fikERzcGCCkWE"                # ID of the google sheets you are going to insert the data into
 sheet_id_test = "14AiRvaYRDmols7VXmKY7VE_Zq3fM631lIPopst0Iowg"           # Just another ID
-sheet_range = "Página1!A1:F100"                                              # Defines the range of the sheet
+sheet_range = "'Página1'!A:F"                                              # Defines the range of the sheet
 iof = 1.0338
 bill_value_usd = 20.00
 
